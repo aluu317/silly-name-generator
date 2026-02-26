@@ -1,0 +1,41 @@
+name: Auto-add issues to Enterprise Project
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add issue to project
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+          PROJECT_ID: "MDk6UHJvamVjdFYyMjAzNDM="
+        run: |
+          ISSUE_ID=$(gh api graphql -f query='
+            query($owner:String!, $repo:String!, $number:Int!) {
+              repository(owner:$owner, name:$repo) {
+                issue(number:$number) {
+                  id
+                }
+              }
+            }' \
+            -f owner=${{ github.repository_owner }} \
+            -f repo=${{ github.event.repository.name }} \
+            -F number=${{ github.event.issue.number }} \
+            --jq '.data.repository.issue.id')
+
+          gh api graphql -f query='
+            mutation($projectId:ID!, $contentId:ID!) {
+              addProjectV2ItemById(input:{
+                projectId:$projectId
+                contentId:$contentId
+              }) {
+                item {
+                  id
+                }
+              }
+            }' \
+            -f projectId=$PROJECT_ID \
+            -f contentId=$ISSUE_ID
