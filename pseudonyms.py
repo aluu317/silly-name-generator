@@ -1,3 +1,7 @@
+"""
+Module to generate silly names from pre-saved first and last name lists at random. Any edit
+made to the name lists are only saved for the session.
+"""
 import random
 import sys
 
@@ -33,31 +37,36 @@ last = ['Appleyard', 'Bigmeat', 'Bloominshine', 'Boogerbottom',
         'Woolysocks']
 
 def show_names():
-  print("\nFirst Names: ", first)
-  print("\n\n")
-  print("\Last Names: ", last)
+    """prints first name list, then last name list to the screen
+    """
+    print("\nFirst Names: ", first)
+    print("\n\n")
+    print("\nLast Names: ", last)
 
 while True:
-  firstName = random.choice(first)
-  lastName = random.choice(last)
+    first_name = random.choice(first)
+    last_name = random.choice(last)
 
-  print("\n")
-  print(firstName, lastName, file = sys.stderr)
-  print("\n")
+    print("\n")
+    print(first_name, last_name, file = sys.stderr)
+    print("\n")
 
-  try_again = input("\n\nTry again? (Press Enter else n to quit.)\nTo see and edit first/last names, Press e\n")
-  if try_again.lower() == "e":
-    show_names()
-    name_type = input("\nEdit first names? Type f. Edit last names? Type l. Or Press Enter to generate a name.\n")
-    name_list = input("\nEnter names to add to the list, comma separated. Example: Bestie, BFF, Girly\n")
-    clean_list = [n.strip() for n in name_list.split(",")]
-    if name_type.lower() == 'f':
-      first.extend(clean_list)
-      first.sort()
-    if name_type.lower() == 'l':
-      last.extend(clean_list)
-      last.sort()
-  if try_again.lower() == "n":
-    break
+    try_again = input("\n\nTry again? (Press Enter else n to quit.)\nTo see and edit \
+        first/last names, Press e\n")
+    if try_again.lower() == "e":
+        show_names()
+        name_type = input("\nEdit first names? Type f. Edit last names? Type l. Or Press Enter \
+            to generate a name.\n")
+        name_list = input("\nEnter names to add to the list, comma separated. Example: Bestie, \
+            BFF, Girly\n")
+        clean_list = [n.strip() for n in name_list.split(",")]
+        if name_type.lower() == 'f':
+            first.extend(clean_list)
+            first.sort()
+        if name_type.lower() == 'l':
+            last.extend(clean_list)
+            last.sort()
+    if try_again.lower() == "n":
+        break
 
-input("\nPress Enter to exit.")
+    input("\nPress Enter to exit.")
